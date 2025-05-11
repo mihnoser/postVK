@@ -6,7 +6,7 @@ class MainKtTest {
     @Test
     fun updateExisting() {
         val service = WallService
-        val post1 = Post(
+        service.add(Post(
             1,
             14343,
             1460041200,
@@ -17,8 +17,8 @@ class MainKtTest {
             true,
             false,
             true
-        )
-        val post2 = Post(
+        ))
+        service.add(Post(
             2,
             134524,
             1460041200,
@@ -29,8 +29,8 @@ class MainKtTest {
             false,
             true,
             true
-        )
-        val post3 = Post(
+        ))
+        service.add(Post(
             3,
             167867,
             1460041200,
@@ -41,7 +41,7 @@ class MainKtTest {
             false,
             true,
             true
-        )
+        ))
         val update = Post(
             2,
             142,
@@ -54,8 +54,7 @@ class MainKtTest {
             true,
             true
         )
-        service.add(post1)
-        service.add(post2)
+
         val result = service.update(update)
         assertTrue(result)
     }
@@ -63,7 +62,7 @@ class MainKtTest {
     @Test
     fun updateNotExisting() {
         val service = WallService
-        val post1 = Post(
+        service.add(Post(
             1,
             14343,
             1460041200,
@@ -74,8 +73,8 @@ class MainKtTest {
             true,
             false,
             true
-        )
-        val post2 = Post(
+        ))
+        service.add(Post(
             2,
             134524,
             1460041200,
@@ -86,8 +85,8 @@ class MainKtTest {
             false,
             true,
             true
-        )
-        val post3 = Post(
+        ))
+        service.add(Post(
             3534,
             167867,
             1460041200,
@@ -98,7 +97,7 @@ class MainKtTest {
             false,
             true,
             true
-        )
+        ))
         val update = Post(
             256,
             142,
@@ -112,8 +111,6 @@ class MainKtTest {
             true
         )
 
-        service.add(post1)
-        service.add(post2)
         val result = service.update(update)
         assertFalse(result)
     }
