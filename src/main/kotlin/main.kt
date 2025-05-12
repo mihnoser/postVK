@@ -45,6 +45,11 @@ object WallService {
         }
         println("Следующий идентификатор (id) = $nextId")
     }
+
+    fun clear() {
+        posts = emptyArray()
+        nextId = 1
+    }
 }
 
 
