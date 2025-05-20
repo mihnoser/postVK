@@ -22,7 +22,11 @@ class MainKtTest {
             Likes(555,true, true,true),
             true,
             false,
-            true
+            true,
+            Comments(1,true,true, false,false),
+            null,
+            arrayOf()
+
         ))
         service.add(Post(
             2,
@@ -34,7 +38,10 @@ class MainKtTest {
             Likes(1705,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(2,true,true, false,false),
+            null,
+            arrayOf()
         ))
         service.add(Post(
             3,
@@ -46,7 +53,10 @@ class MainKtTest {
             Likes(4,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(3,true,true, false,false),
+            null,
+            arrayOf()
         ))
         val update = Post(
             2,
@@ -58,7 +68,10 @@ class MainKtTest {
             Likes(800,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(4,true,true, false,false),
+            null,
+            arrayOf()
         )
 
         val result = service.update(update)
@@ -78,7 +91,10 @@ class MainKtTest {
             Likes(555,true, true,true),
             true,
             false,
-            true
+            true,
+            Comments(1,true,true, false,false),
+            null,
+            arrayOf()
         ))
         service.add(Post(
             2,
@@ -90,7 +106,10 @@ class MainKtTest {
             Likes(1705,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(2,true,true, false,false),
+            null,
+            arrayOf()
         ))
         service.add(Post(
             3534,
@@ -102,7 +121,10 @@ class MainKtTest {
             Likes(4,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(3,true,true, false,false),
+            null,
+            arrayOf()
         ))
         val update = Post(
             256,
@@ -114,7 +136,10 @@ class MainKtTest {
             Likes(800,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(4,true,true, false,false),
+            null,
+            arrayOf()
         )
 
         val result = service.update(update)
@@ -134,9 +159,52 @@ class MainKtTest {
             Likes(800,true, true,true),
             false,
             true,
-            true
+            true,
+            Comments(1,true,true, false,false),
+            null,
+            arrayOf()
         ))
 
         assertTrue(newPost.id > 0)
     }
+
+    @Test
+    fun createCommentSuccess() {
+        val post = WallService.add(Post(1234,
+            142,
+            1460041200,
+            "тест поста",
+            0,
+            true,
+            Likes(800,true, true,true),
+            false,
+            true,
+            true,
+            Comments(4,true,true, false,false),
+            null,
+            arrayOf()))
+
+        val comment = Comment(
+            1,
+            2424,
+            4343454,
+            "тест коментария"
+        )
+
+        val createdComment = WallService.createComment(post.id, comment)
+        assertEquals(1,createdComment.id)
+    }
+
+    @Test
+    fun createCommentPostNotFound() {
+        val comment = Comment(
+            1,
+            2,
+            564564123,
+            "второй тест коментария"
+        )
+
+        WallService.createComment(1, comment)
+    }
+
 }

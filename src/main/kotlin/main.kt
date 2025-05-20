@@ -1,7 +1,7 @@
-import Attachments as Attachments
+class PostNotFoundException (message: String) : RuntimeException(message)
 
 data class Post(
-    val id: Long = 0,
+    val id: Int = 0,
     val ownerId: Long,
     val date: Long,
     val text: String,
@@ -11,7 +11,7 @@ data class Post(
     val canEdit: Boolean,
     val markedAsAds: Boolean,
     val isFavorite: Boolean,
-    val coments: Comments? = null,
+    val comments: Comments,
     val views: Views? = null,
     val attachments: Array<Attachments> = emptyArray()
 )
@@ -23,16 +23,26 @@ data class Likes(
     val canPublish : Boolean
 )
 
-data class Comments(
-    val count: Int,
-    val canPost: Boolean,
-    val groupsCanPost: Boolean,
-    val canClose: Boolean,
-    val canOpen: Boolean
-)
-
 data class Views(
     val count: Int
+)
+
+data class Comments(
+    val count: Int = 1,
+    val canPost: Boolean = true,
+    val groupsCanPost: Boolean = true,
+    val canClose: Boolean = false,
+    val canOpen: Boolean = false
+)
+
+data class Comment(
+    val id: Int = 1,
+    val fromId: Int,
+    val date: Int,
+    val text: String,
+    val replyToUser: Int? = null,
+    val replyToComment: Int? = null,
+    val attachments: Array<Attachments> = emptyArray()
 )
 
 abstract class Attachments(val type: String)
@@ -93,8 +103,10 @@ data class Link(
 )
 
 object WallService {
-    var posts: Array<Post> = emptyArray()
-    var nextId: Long = 1
+    private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
+    private var nextId = 1
+    private var nextCommentId = 1
 
     fun add(post: Post): Post {
         val newPost = post.copy(id = nextId)
@@ -122,7 +134,18 @@ object WallService {
 
     fun clear() {
         posts = emptyArray()
+        comments = emptyArray()
         nextId = 1
+    }
+
+    fun createComment(postId: Int, comment: Comment): Comment {
+        if (posts.none { it.id == postId }) {
+            throw PostNotFoundException("Post with id $postId not found")
+        }
+
+        val newComment = comment.copy(id = nextCommentId++)
+        comments += newComment
+        return newComment
     }
 }
 
@@ -152,7 +175,7 @@ fun main() {
         true,
         false,
         true,
-        Comments(8, true, true, true, true),
+        Comments(8, true, false, false),
         null,
         arrayOf(attachmentsVideo1, attachmentsDoc1)
     )
@@ -167,7 +190,7 @@ fun main() {
         false,
         true,
         true,
-        Comments(8, true, true, true, true),
+        Comments(6, true, false, false),
         null,
         arrayOf(attachmentsAudio1, attachmentsLink1, attachmentsDoc1)
     )
@@ -182,7 +205,7 @@ fun main() {
         false,
         true,
         true,
-        Comments(8, true, true, true, true),
+        Comments(3, true, false, false),
         null,
         arrayOf(attachmentsVideo1, attachmentsAudio1)
     )
@@ -197,7 +220,7 @@ fun main() {
         false,
         true,
         true,
-        Comments(8, true, true, true, true),
+        Comments(12, true, false, false),
         null,
         arrayOf(attachmentsPhoto1)
     )
