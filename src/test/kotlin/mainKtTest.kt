@@ -195,8 +195,8 @@ class MainKtTest {
         assertEquals(1,createdComment.id)
     }
 
-    @Test
-    fun createCommentPostNotFound() {
+    @Test(expected = PostNotFoundException::class)
+    fun shouldThrow() {
         val comment = Comment(
             1,
             2,
@@ -204,7 +204,7 @@ class MainKtTest {
             "второй тест коментария"
         )
 
-        WallService.createComment(1, comment)
+        WallService.createComment(181, comment)
     }
 
 }
